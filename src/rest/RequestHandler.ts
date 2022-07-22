@@ -75,7 +75,12 @@ export class RequestHandler {
 	}
 
 	private async exec<T>(path: string, options: RequestOptions = {}, retries = 0): Promise<Response<T>> {
-		const res = await fetch(`${this.baseURL}${path}`, {
+		const res = await /* TODO: JSFIX could not patch the breaking change:
+        The timeout option was removed
+        Suggested fix: Use timeout-signal as a workaround: https://github.com/node-fetch/node-fetch/blob/main/docs/v3-UPGRADE-GUIDE.md#the-timeout-option-was-removed*/
+        /* TODO: JSFIX could not patch the breaking change:
+        req.body can no longer be a string*/
+        fetch(`${this.baseURL}${path}`, {
 			agent,
 			body: options.body,
 			method: options.method,
@@ -126,7 +131,10 @@ export class RequestHandler {
 
 	private async reValidateKeys() {
 		for (const key of this.keys) {
-			const res = await fetch(`${this.baseURL}/locations?limit=1`, {
+			const res = await /* TODO: JSFIX could not patch the breaking change:
+            The timeout option was removed
+            Suggested fix: Use timeout-signal as a workaround: https://github.com/node-fetch/node-fetch/blob/main/docs/v3-UPGRADE-GUIDE.md#the-timeout-option-was-removed*/
+            fetch(`${this.baseURL}/locations?limit=1`, {
 				method: 'GET',
 				timeout: 10_000,
 				headers: { 'Authorization': `Bearer ${key}`, 'Content-Type': 'application/json' }
@@ -141,7 +149,12 @@ export class RequestHandler {
 	}
 
 	private async login() {
-		const res = await fetch(`${DEV_SITE_API_BASE_URL}/login`, {
+		const res = await /* TODO: JSFIX could not patch the breaking change:
+        The timeout option was removed
+        Suggested fix: Use timeout-signal as a workaround: https://github.com/node-fetch/node-fetch/blob/main/docs/v3-UPGRADE-GUIDE.md#the-timeout-option-was-removed*/
+        /* TODO: JSFIX could not patch the breaking change:
+        req.body can no longer be a string*/
+        fetch(`${DEV_SITE_API_BASE_URL}/login`, {
 			method: 'POST',
 			timeout: 10_000,
 			headers: { 'Content-Type': 'application/json' },
@@ -158,7 +171,10 @@ export class RequestHandler {
 	}
 
 	private async getKeys(cookie: string, ip: string) {
-		const res = await fetch(`${DEV_SITE_API_BASE_URL}/apikey/list`, {
+		const res = await /* TODO: JSFIX could not patch the breaking change:
+        The timeout option was removed
+        Suggested fix: Use timeout-signal as a workaround: https://github.com/node-fetch/node-fetch/blob/main/docs/v3-UPGRADE-GUIDE.md#the-timeout-option-was-removed*/
+        fetch(`${DEV_SITE_API_BASE_URL}/apikey/list`, {
 			method: 'POST',
 			timeout: 10_000,
 			headers: { 'Content-Type': 'application/json', cookie }
@@ -208,7 +224,12 @@ export class RequestHandler {
 	}
 
 	private async revokeKey(keyId: string, cookie: string) {
-		const res = await fetch(`${DEV_SITE_API_BASE_URL}/apikey/revoke`, {
+		const res = await /* TODO: JSFIX could not patch the breaking change:
+        The timeout option was removed
+        Suggested fix: Use timeout-signal as a workaround: https://github.com/node-fetch/node-fetch/blob/main/docs/v3-UPGRADE-GUIDE.md#the-timeout-option-was-removed*/
+        /* TODO: JSFIX could not patch the breaking change:
+        req.body can no longer be a string*/
+        fetch(`${DEV_SITE_API_BASE_URL}/apikey/revoke`, {
 			method: 'POST',
 			timeout: 10_000,
 			body: JSON.stringify({ id: keyId }),
@@ -219,7 +240,12 @@ export class RequestHandler {
 	}
 
 	private async createKey(cookie: string, ip: string) {
-		const res = await fetch(`${DEV_SITE_API_BASE_URL}/apikey/create`, {
+		const res = await /* TODO: JSFIX could not patch the breaking change:
+        The timeout option was removed
+        Suggested fix: Use timeout-signal as a workaround: https://github.com/node-fetch/node-fetch/blob/main/docs/v3-UPGRADE-GUIDE.md#the-timeout-option-was-removed*/
+        /* TODO: JSFIX could not patch the breaking change:
+        req.body can no longer be a string*/
+        fetch(`${DEV_SITE_API_BASE_URL}/apikey/create`, {
 			method: 'POST',
 			timeout: 10_000,
 			headers: { 'Content-Type': 'application/json', cookie },
@@ -241,7 +267,10 @@ export class RequestHandler {
 			const props = decoded.limits.find((limit: { cidrs: string[] }) => limit.hasOwnProperty('cidrs'));
 			return (props.cidrs[0] as string).match(IP_REGEX)![0];
 		} catch {
-			const body = await fetch('https://api.ipify.org', { timeout: 10_000 }).then((res) => res.text());
+			const body = await /* TODO: JSFIX could not patch the breaking change:
+            The timeout option was removed
+            Suggested fix: Use timeout-signal as a workaround: https://github.com/node-fetch/node-fetch/blob/main/docs/v3-UPGRADE-GUIDE.md#the-timeout-option-was-removed*/
+            fetch('https://api.ipify.org', { timeout: 10_000 }).then((res) => res.text());
 			return body.match(IP_REGEX)?.[0] ?? null;
 		}
 	}
